@@ -1,0 +1,7 @@
+[
+  {"data_protections": ["DATA_NOT_TRACK"]},
+  {"category": "CONTACTS", "purposes": ["APP_FUNCTIONALITY"], "data_protections": ["DATA_LINKED_TO_YOU"]},
+  {"category": "PHONE_NUMBER", "purposes": ["APP_FUNCTIONALITY"], "data_protections": ["DATA_LINKED_TO_YOU"]},
+  {"category": "OTHER_USER_CONTENT", "purposes": ["APP_FUNCTIONALITY"], "data_protections": ["DATA_LINKED_TO_YOU"]},
+  {"category": "USER_ID", "purposes": ["APP_FUNCTIONALITY"], "data_protections": ["DATA_LINKED_TO_YOU"]}
+]
