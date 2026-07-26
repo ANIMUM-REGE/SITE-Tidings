@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tidings — claim your free year</title>
+<style>
+  :root { color-scheme: light dark; --card:#fff; --line:#e9e2d6; --accent:#c8743c; --accentText:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --card:#2a2724; --line:#3a352f; } }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+         background:#faf7f2; color:#2d2a26; padding:24px; }
+  @media (prefers-color-scheme: dark) { body { background:#211f1c; color:#f0ece5; } }
+  .card { width:100%; max-width:440px; background:var(--card); border:1px solid var(--line);
+          border-radius:18px; padding:32px 28px; box-shadow:0 10px 40px rgba(0,0,0,.06); }
+  h1 { font-size:1.9rem; margin:0 0 .3rem; letter-spacing:-.02em; }
+  .sub { font-size:1.02rem; line-height:1.5; opacity:.82; margin:0 0 20px; }
+  .scarcity { display:none; font-size:.95rem; font-weight:600; color:var(--accent);
+              background:color-mix(in srgb, var(--accent) 12%, transparent);
+              border-radius:10px; padding:10px 14px; margin:0 0 20px; }
+  button { width:100%; border:0; border-radius:12px; padding:15px; font-size:1.05rem; font-weight:600;
+           background:var(--accent); color:var(--accentText); cursor:pointer; letter-spacing:.01em; }
+  button:disabled { opacity:.5; cursor:default; }
+  .choice { display:flex; gap:10px; margin-bottom:12px; }
+  .choice button { background:transparent; color:var(--accent); border:1.5px solid var(--accent); }
+  .choice button.sel { background:var(--accent); color:var(--accentText); }
+  .code { font-family:ui-monospace,Menlo,monospace; font-size:1.6rem; font-weight:700; letter-spacing:.06em;
+          text-align:center; padding:16px; border:2px dashed var(--accent); border-radius:12px; margin:6px 0 14px;
+          user-select:all; }
+  .steps { font-size:.95rem; line-height:1.55; opacity:.85; }
+  .muted { font-size:.85rem; opacity:.6; margin-top:16px; }
+  .err { color:#b3261e; font-weight:600; }
+  .hide { display:none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Your free year of Tidings 🎁</h1>
+  <p class="sub">Tidings remembers every birthday, anniversary, and holiday that matters — and helps you send something warm. Claim a code below.</p>
+
+  <div id="scarcity" class="scarcity"></div>
+
+  <div id="choose" class="choice hide">
+    <button data-p="ios" id="ios">iPhone / iPad</button>
+    <button data-p="android" id="android">Android</button>
+  </div>
+
+  <button id="claim">Get my code</button>
+
+  <div id="result" class="hide">
+    <div id="code" class="code"></div>
+    <div id="steps" class="steps"></div>
+  </div>
+
+  <div id="msg" class="muted"></div>
+  <div class="muted">One code per person. Codes are limited.</div>
+</div>
+
+<script>
+  const API = "https://tidings-backend-func.azurewebsites.net/api/unlock";
+  const q = new URLSearchParams(location.search);
+  const k = q.get("k") || "";
+  const $ = id => document.getElementById(id);
+
+  // stable per-device id (so a refresh returns the SAME code, never a new one)
+  let dev = localStorage.getItem("tidings_dev");
+  if (!dev) { dev = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(36).slice(2)); localStorage.setItem("tidings_dev", dev); }
+
+  // platform detect with manual fallback for desktop
+  const ua = navigator.userAgent || "";
+  let platform = /android/i.test(ua) ? "android"
+               : (/iphone|ipad|ipod/i.test(ua) || (/mac/i.test(ua) && navigator.maxTouchPoints > 1)) ? "ios"
+               : null;
+
+  function setChoice(p){ platform = p; $("ios").classList.toggle("sel", p==="ios"); $("android").classList.toggle("sel", p==="android"); }
+  if (!platform) { $("choose").classList.remove("hide"); }
+  $("ios").onclick = ()=>setChoice("ios");
+  $("android").onclick = ()=>setChoice("android");
+
+  async function loadScarcity(){
+    if (!k) return;
+    try {
+      const r = await fetch(`${API}/status?k=${encodeURIComponent(k)}`);
+      if (!r.ok) return;
+      const d = await r.json();
+      const p = platform || "ios";
+      const left = d[p] ? d[p].remaining : 0;
+      if (left > 0) { $("scarcity").style.display="block"; $("scarcity").textContent = `Only ${left} codes left — get yours today.`; }
+    } catch(e){}
+  }
+
+  async function claim(){
+    $("msg").textContent = ""; $("msg").classList.remove("err");
+    if (!k) { $("msg").textContent = "This link is missing its access code. Ask for the full link."; $("msg").classList.add("err"); return; }
+    if (!platform) { $("msg").textContent = "Please pick your device type first."; $("msg").classList.add("err"); return; }
+    $("claim").disabled = true; $("claim").textContent = "Getting your code…";
+    try {
+      const r = await fetch(`${API}/dispense?k=${encodeURIComponent(k)}`, {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ platform, deviceId: dev })
+      });
+      const d = await r.json();
+      if (!r.ok) {
+        const m = d.error === "sold_out" ? "All codes for this device type have been claimed — thank you!"
+                : d.error === "unauthorized" ? "This link isn't valid. Ask for the current one."
+                : "Something went wrong — please try again in a moment.";
+        $("msg").textContent = m; $("msg").classList.add("err");
+        $("claim").disabled = false; $("claim").textContent = "Get my code"; return;
+      }
+      $("claim").classList.add("hide"); $("choose").classList.add("hide"); $("scarcity").style.display="none";
+      $("result").classList.remove("hide");
+      $("code").textContent = d.code;
+      const redeemBtn = d.url ? `<a href="${d.url}" style="display:block;text-align:center;background:var(--accent);color:var(--accentText);text-decoration:none;padding:14px;border-radius:12px;font-weight:600;margin:0 0 12px">Redeem now →</a>` : "";
+      $("steps").innerHTML = redeemBtn + "<b>Or enter it manually:</b><br>" + d.redeem;
+      $("msg").textContent = d.already ? "This is your code — redeem it any time." : "Tap “Redeem now”, or copy the code above.";
+    } catch(e) {
+      $("msg").textContent = "Network error — please try again."; $("msg").classList.add("err");
+      $("claim").disabled = false; $("claim").textContent = "Get my code";
+    }
+  }
+  $("claim").onclick = claim;
+  loadScarcity();
+</script>
+</body>
+</html>
