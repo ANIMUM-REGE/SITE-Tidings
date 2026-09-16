@@ -21,10 +21,19 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 - `sms-opt-in.html`
 - `privacy_label.json`
 - `unlock/index.html` — the self-serve 90-day trial code dispenser (needs `?k=<passphrase>`,
-  an Azure Function App setting, never committed here). **Not yet linked from the homepage** —
-  wiring that in needs the passphrase supplied through an approved channel, not typed into this
-  public repo's history by an agent session. See `company/state/tidings-code-dispenser-spec.md`
-  in VNTR-Perpetua for the design.
+  an Azure Function App setting, never committed here). Not linked from the homepage or the
+  `get/` page (see below) — BB's call, 2026-09-16: now that the code is redeemable **inside the
+  app** (paywall + Settings CTA, same dispenser pool — see
+  `APP-Tidings/docs/design/in-app-redeem-2026-09-15.md`), the direct-marketing flow sends people
+  to install the app, not to this webpage. It's still live for anyone with the standing
+  `/unlock/?k=` link. See `company/state/tidings-code-dispenser-spec.md` in VNTR-Perpetua for
+  the original design. A working `?k=` link 302s from the Function App's `/api/unlock/go` too
+  (`APP-Tidings/backend/function_app.py`), so the passphrase never has to live in this repo.
+- `get/index.html` — **the link for SMS/direct-marketing campaigns.** Detects iOS vs Android
+  from the user agent and sends the visitor straight to the matching store listing (no
+  intermediate webpage); desktop/unrecognized gets a visible fallback with both badges. Added
+  2026-09-16 for BB's friends-and-family invite campaign — the early-access code is retrieved
+  in-app after install, not from a webpage.
 
 ## App status
 
