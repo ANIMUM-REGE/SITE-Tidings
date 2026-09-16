@@ -9,7 +9,7 @@
   :root {
     color-scheme: light dark;
     --bg: #faf7f2; --card: #ffffff; --text: #2d2a26; --muted: #6b6660;
-    --accent: #c8743c; --line: #e9e2d6;
+    --accent: #c8743c; --accentDeep: #a84026; --line: #e9e2d6;
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #211f1c; --card: #2a2724; --text: #f0ece5; --muted: #b9b2a8; --line: #3a352f; }
@@ -31,6 +31,15 @@
   .badges a { display: inline-block; line-height: 0; }
   .badges img.appstore { height: 52px; }
   .badges img.googleplay { height: 78px; margin: -13px 0; }
+
+  .trial-cta { text-align: center; margin-top: 1.5rem; }
+  .trial-cta a.btn {
+    display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
+    font-weight: 600; font-size: 1.02rem; padding: .9rem 1.6rem; border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(200,116,60,.28);
+  }
+  .trial-cta a.btn:hover { background: var(--accentDeep); }
+  .trial-cta p { color: var(--muted); font-size: .88rem; margin: .6rem 0 0; }
 
   section.shots { padding: 1rem 0 3.5rem; }
   .shot-scroll {
@@ -83,6 +92,11 @@
     <a href="https://play.google.com/store/apps/details?id=com.animumrege.tidings" aria-label="Get it on Google Play">
       <img class="googleplay" src="assets/badges/google-play-badge.png" alt="Get it on Google Play">
     </a>
+  </div>
+
+  <div class="trial-cta">
+    <a class="btn" href="https://tidings-backend-func.azurewebsites.net/api/unlock/go">Try Tidings free for 90 days</a>
+    <p>No credit card. Redeem straight from the App Store or Play Store.</p>
   </div>
 
 </header>

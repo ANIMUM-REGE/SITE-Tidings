@@ -11,24 +11,24 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 
 ## Pages
 
-- `index.html` — homepage: hero, App Store/Play badges, live App Store screenshots
-  (`assets/screenshots/`, pulled from the ASC media library, not regenerated locally),
-  "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now that
-  Tidings is live — screenshots + copy only; the "try free" CTA to `/unlock` was deliberately
-  left off this pass (see `unlock/` below).
+- `index.html` — homepage: hero, App Store/Play badges, a "try free" CTA, live App Store
+  screenshots (`assets/screenshots/`, pulled from the ASC media library, not regenerated
+  locally), "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now
+  that Tidings is live. The CTA links to `tidings-backend-func`'s `/api/unlock/go`
+  (see `unlock/` below) — never a raw `?k=` link — so the passphrase never has to live in this
+  public repo's source or history.
 - `privacy.html`
 - `support.html`
 - `sms-opt-in.html`
 - `privacy_label.json`
 - `unlock/index.html` — the self-serve 90-day trial code dispenser (needs `?k=<passphrase>`,
-  an Azure Function App setting, never committed here). Not linked from the homepage or the
-  `get/` page (see below) — BB's call, 2026-09-16: now that the code is redeemable **inside the
-  app** (paywall + Settings CTA, same dispenser pool — see
-  `APP-Tidings/docs/design/in-app-redeem-2026-09-15.md`), the direct-marketing flow sends people
-  to install the app, not to this webpage. It's still live for anyone with the standing
-  `/unlock/?k=` link. See `company/state/tidings-code-dispenser-spec.md` in VNTR-Perpetua for
-  the original design. A working `?k=` link 302s from the Function App's `/api/unlock/go` too
-  (`APP-Tidings/backend/function_app.py`), so the passphrase never has to live in this repo.
+  an Azure Function App setting, never committed here). Reached from the homepage via
+  `/api/unlock/go`, a 302 redirect on `tidings-backend-func` that reads the passphrase
+  server-side (`APP-Tidings/backend/function_app.py`). Not linked from the `get/` page (below)
+  — BB's call, 2026-09-16: now that the code is redeemable **inside the app** (paywall +
+  Settings CTA, same dispenser pool — see `APP-Tidings/docs/design/in-app-redeem-2026-09-15.md`),
+  the SMS/direct-marketing flow sends people to install the app instead. See
+  `company/state/tidings-code-dispenser-spec.md` in VNTR-Perpetua for the original design.
 - `get/index.html` — **the link for SMS/direct-marketing campaigns.** Detects iOS vs Android
   from the user agent and sends the visitor straight to the matching store listing (no
   intermediate webpage); desktop/unrecognized gets a visible fallback with both badges. Added
