@@ -14,17 +14,23 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 - `index.html` — homepage: hero, App Store/Play badges, a "try free" CTA, live App Store
   screenshots (`assets/screenshots/`, pulled from the ASC media library, not regenerated
   locally), "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now
-  that Tidings is live. The CTA links to `tidings-backend-func`'s `/api/unlock/go`
-  (see `unlock/` below) — never a raw `?k=` link — so the passphrase never has to live in this
-  public repo's source or history.
+  that Tidings is live. The CTA links to `/trial/` (below), never directly to the Function App
+  or a raw `?k=` link, so neither the passphrase nor the `azurewebsites.net` hostname is ever
+  visible on the homepage's link preview.
+- `trial/index.html` — same-domain relay: a bare client-side redirect to
+  `tidings-backend-func`'s `/api/unlock/go`, added 2026-09-16 (BB: don't expose the Azure
+  hostname on the homepage). **Obfuscation only, not a security boundary** — the passphrase-gate
+  + one-code-per-device on the backend are the real protection either way; this page just keeps
+  `azurewebsites.net` off what a visitor sees hovering the homepage button.
 - `privacy.html`
 - `support.html`
 - `sms-opt-in.html`
 - `privacy_label.json`
 - `unlock/index.html` — the self-serve 90-day trial code dispenser (needs `?k=<passphrase>`,
   an Azure Function App setting, never committed here). Reached from the homepage via
-  `/api/unlock/go`, a 302 redirect on `tidings-backend-func` that reads the passphrase
-  server-side (`APP-Tidings/backend/function_app.py`). Not linked from the `get/` page (below)
+  `/trial/` → `/api/unlock/go`, a 302 redirect on `tidings-backend-func` that reads the
+  passphrase server-side (`APP-Tidings/backend/function_app.py`). Not linked from the `get/`
+  page (below)
   — BB's call, 2026-09-16: now that the code is redeemable **inside the app** (paywall +
   Settings CTA, same dispenser pool — see `APP-Tidings/docs/design/in-app-redeem-2026-09-15.md`),
   the SMS/direct-marketing flow sends people to install the app instead. See

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidings — free trial</title>
+<meta name="robots" content="noindex,nofollow">
+<script>
+  // Same-domain relay: the homepage button links here (tidings.family/trial/) instead
+  // of directly to the Function App, so hovering/inspecting the link on the homepage
+  // never shows azurewebsites.net. This hop then forwards to the Function App, which
+  // itself 302s to tidings.family/unlock/?k=... — the visible destination stays on our
+  // own domain at both ends of the click. Obfuscation only, not a security boundary:
+  // the passphrase-gate + one-code-per-device on the backend are what actually protect
+  // the dispenser (see APP-Tidings/backend/function_app.py) — this page just keeps the
+  // Azure hostname off the homepage's link preview.
+  location.replace("https://tidings-backend-func.azurewebsites.net/api/unlock/go");
+</script>
+</head>
+<body></body>
+</html>
