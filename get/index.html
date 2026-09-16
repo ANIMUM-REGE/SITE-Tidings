@@ -12,12 +12,27 @@
   // same dispenser pool as tidings.family/unlock), so a marketing text should land
   // people on an install prompt, not a webpage. Desktop/unknown gets the visible
   // fallback below instead of a guess.
+  //
+  // Referral forwarding: a referral link is /get/?ref=<CODE>. We pass <CODE> into the Google Play
+  // `referrer` param — Play delivers that string to the app via the Install Referrer API on first
+  // launch, so a referral survives a COLD Android install with no re-tap. The Android app reads it
+  // as `ref=<CODE>` (ReferralStore.parseRef). Apple has no equivalent install-referrer, so iOS
+  // can't carry ref through a fresh App Store install — that path stays as-is.
   (function () {
+    var raw = (new URLSearchParams(location.search).get("ref") || "").trim().toUpperCase();
+    var ref = /^[A-Z2-9]{8}$/.test(raw) ? raw : "";  // validate; never forward garbage
+    var play = "https://play.google.com/store/apps/details?id=com.animumrege.tidings"
+      + (ref ? "&referrer=" + encodeURIComponent("ref=" + ref) : "");
+    // Keep the visible Google Play badge in sync for desktop/manual taps.
+    document.addEventListener("DOMContentLoaded", function () {
+      var a = document.getElementById("gp-link");
+      if (a) a.setAttribute("href", play);
+    });
     var ua = navigator.userAgent || "";
     var isIOS = /iphone|ipad|ipod/i.test(ua) || (/mac/i.test(ua) && navigator.maxTouchPoints > 1);
     var isAndroid = /android/i.test(ua);
     if (isIOS) location.replace("https://apps.apple.com/app/id6790977142");
-    else if (isAndroid) location.replace("https://play.google.com/store/apps/details?id=com.animumrege.tidings");
+    else if (isAndroid) location.replace(play);
   })();
 </script>
 <style>
@@ -49,7 +64,7 @@
     <a href="https://apps.apple.com/app/id6790977142" aria-label="Download on the App Store">
       <img class="appstore" src="../assets/badges/app-store-badge.svg" alt="Download on the App Store">
     </a>
-    <a href="https://play.google.com/store/apps/details?id=com.animumrege.tidings" aria-label="Get it on Google Play">
+    <a id="gp-link" href="https://play.google.com/store/apps/details?id=com.animumrege.tidings" aria-label="Get it on Google Play">
       <img class="googleplay" src="../assets/badges/google-play-badge.png" alt="Get it on Google Play">
     </a>
   </div>
