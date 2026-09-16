@@ -11,11 +11,20 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 
 ## Pages
 
-- `index.html`
+- `index.html` — homepage: hero, App Store/Play badges, live App Store screenshots
+  (`assets/screenshots/`, pulled from the ASC media library, not regenerated locally),
+  "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now that
+  Tidings is live — screenshots + copy only; the "try free" CTA to `/unlock` was deliberately
+  left off this pass (see `unlock/` below).
 - `privacy.html`
 - `support.html`
 - `sms-opt-in.html`
 - `privacy_label.json`
+- `unlock/index.html` — the self-serve 90-day trial code dispenser (needs `?k=<passphrase>`,
+  an Azure Function App setting, never committed here). **Not yet linked from the homepage** —
+  wiring that in needs the passphrase supplied through an approved channel, not typed into this
+  public repo's history by an agent session. See `company/state/tidings-code-dispenser-spec.md`
+  in VNTR-Perpetua for the design.
 
 ## App status
 

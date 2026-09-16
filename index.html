@@ -6,25 +6,139 @@
 <title>Tidings — never miss a moment</title>
 <meta name="description" content="Tidings remembers the birthdays, anniversaries, and holidays that matter — and helps you send something warm.">
 <style>
-  :root { color-scheme: light dark; }
-  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-         display:flex; min-height:100vh; align-items:center; justify-content:center;
-         background:#faf7f2; color:#2d2a26; }
-  @media (prefers-color-scheme: dark) { body { background:#211f1c; color:#f0ece5; } }
-  main { text-align:center; padding:2rem; max-width:26rem; }
-  h1 { font-size:2.4rem; margin:0 0 .4rem; letter-spacing:-.02em; }
-  p { font-size:1.05rem; line-height:1.5; opacity:.85; }
-  .badge { margin-top:1.4rem; font-size:.95rem; opacity:.6; }
+  :root {
+    color-scheme: light dark;
+    --bg: #faf7f2; --card: #ffffff; --text: #2d2a26; --muted: #6b6660;
+    --accent: #c8743c; --line: #e9e2d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #211f1c; --card: #2a2724; --text: #f0ece5; --muted: #b9b2a8; --line: #3a352f; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem; }
+
+  header.hero { text-align: center; padding: 4.5rem 1.25rem 2.5rem; }
+  header.hero h1 { font-size: 2.6rem; margin: 0 0 .5rem; letter-spacing: -.02em; }
+  header.hero p.tagline {
+    font-size: 1.15rem; color: var(--muted); max-width: 34rem; margin: 0 auto 2rem;
+  }
+
+  .badges { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-bottom: .75rem; }
+  .badges a { display: inline-block; line-height: 0; }
+  .badges img.appstore { height: 52px; }
+  .badges img.googleplay { height: 78px; margin: -13px 0; }
+
+  section.shots { padding: 1rem 0 3.5rem; }
+  .shot-scroll {
+    display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 1.25rem 1.5rem;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shot-scroll figure {
+    flex: 0 0 auto; width: 220px; margin: 0; scroll-snap-align: center; text-align: center;
+  }
+  .shot-scroll img {
+    width: 100%; border-radius: 22px; border: 1px solid var(--line);
+    box-shadow: 0 12px 32px rgba(0,0,0,.10);
+  }
+  .shot-scroll figcaption {
+    margin-top: .8rem; font-size: .95rem; font-weight: 600; color: var(--text);
+  }
+  .shot-scroll figcaption span {
+    display: block; font-weight: 400; color: var(--muted); font-size: .85rem; margin-top: .15rem;
+  }
+
+  section.how { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 3.5rem 0; }
+  section.how h2 { text-align: center; font-size: 1.7rem; margin: 0 0 2.2rem; letter-spacing: -.01em; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  @media (max-width: 720px) { .steps { grid-template-columns: 1fr; gap: 1.75rem; } }
+  .step { text-align: center; padding: 0 .5rem; }
+  .step .num {
+    width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+    margin: 0 auto .9rem;
+  }
+  .step h3 { margin: 0 0 .4rem; font-size: 1.08rem; }
+  .step p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+  footer { text-align: center; padding: 2.5rem 1.25rem 3rem; color: var(--muted); font-size: .88rem; }
+  footer a { color: var(--muted); }
+  footer .links { margin-top: .5rem; }
+  footer .links a { margin: 0 .5rem; }
 </style>
-<!-- App Store redirect goes live at listing time:
-     <meta http-equiv="refresh" content="0;url=APP_STORE_URL"> + JS fallback.
-     Bare tidings.family is the growth-tag link baked into sent messages — this URL is forever. -->
 </head>
 <body>
-<main>
+
+<header class="hero">
   <h1>Tidings</h1>
-  <p>The birthdays, anniversaries, and little moments that matter — remembered, and answered with something warm.</p>
-  <p class="badge">Coming soon to the App&nbsp;Store.</p>
-</main>
+  <p class="tagline">The birthdays, anniversaries, and little moments that matter — remembered, and answered with something warm.</p>
+
+  <div class="badges">
+    <a href="https://apps.apple.com/app/id6790977142" aria-label="Download on the App Store">
+      <img class="appstore" src="assets/badges/app-store-badge.svg" alt="Download on the App Store">
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.animumrege.tidings" aria-label="Get it on Google Play">
+      <img class="googleplay" src="assets/badges/google-play-badge.png" alt="Get it on Google Play">
+    </a>
+  </div>
+
+</header>
+
+<section class="shots">
+  <div class="shot-scroll">
+    <figure>
+      <img src="assets/screenshots/1-upcoming.png" alt="Tidings Upcoming screen showing birthdays and anniversaries sorted by date">
+      <figcaption>Never miss a moment<span>Every birthday, anniversary, and holiday, sorted by what's next.</span></figcaption>
+    </figure>
+    <figure>
+      <img src="assets/screenshots/2-people.png" alt="Tidings People screen listing family and friends">
+      <figcaption>Keep your people close<span>One list for the people who matter, and what's coming up for each.</span></figcaption>
+    </figure>
+    <figure>
+      <img src="assets/screenshots/4-templates.png" alt="Tidings Messages screen with birthday message templates">
+      <figcaption>Send something that sounds like you<span>Warm, funny, formal, or faith-friendly — pick a tone and go.</span></figcaption>
+    </figure>
+    <figure>
+      <img src="assets/screenshots/3-vault.png" alt="Tidings contact detail screen with keep-warm check-in reminders">
+      <figcaption>Gentle nudges to stay in touch<span>Turn on check-in reminders for the people you don't want to drift from.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Add your people</h3>
+        <p>Add birthdays, anniversaries, and any occasion you want to remember — Tidings keeps the dates.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Get reminded in time</h3>
+        <p>Tidings notifies you a couple of days before, and again on the day, with a message ready to send.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Send it, or automate it</h3>
+        <p>Send it yourself in a tap, or turn on Auto‑Send with Tidings Pro to deliver it by text automatically, signed with your name.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Questions? <a href="mailto:support@animumrege.com">support@animumrege.com</a></div>
+  <div class="links">
+    <a href="/support.html">Support</a>·
+    <a href="/privacy.html">Privacy</a>·
+    <a href="/sms-opt-in.html">SMS consent</a>
+  </div>
+</footer>
+
 </body>
 </html>
