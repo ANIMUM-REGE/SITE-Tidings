@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["BUSJWQJNKY.com.animumrege.tidings"],
+        "components": [
+          { "/": "/get/*" }
+        ]
+      }
+    ]
+  }
+}
