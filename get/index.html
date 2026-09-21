@@ -18,6 +18,29 @@
   // launch, so a referral survives a COLD Android install with no re-tap. The Android app reads it
   // as `ref=<CODE>` (ReferralStore.parseRef). Apple has no equivalent install-referrer, so iOS
   // can't carry ref through a fresh App Store install — that path stays as-is.
+  // Campaign click counter: a marketing link is /get/?c=<slug> (5 known slugs), SEPARATE from
+  // ?ref= above (source attribution, not person-to-person referral credit — a link can carry
+  // either, both, or neither). Fire-and-forget: never blocks or delays the redirect below, and a
+  // failure here is silently swallowed — this is a nice-to-have count, not something a real visitor
+  // should ever notice.
+  (function () {
+    var slugs = ["ads-meta", "ads-google", "sms", "email", "organic"];
+    var c = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
+    if (slugs.indexOf(c) === -1) return;
+    var body = JSON.stringify({ c: c });
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(
+          "https://tidings-backend-func.azurewebsites.net/api/campaign/click",
+          new Blob([body], { type: "application/json" }));
+      } else {
+        fetch("https://tidings-backend-func.azurewebsites.net/api/campaign/click", {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: body, keepalive: true
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  })();
+
   (function () {
     var raw = (new URLSearchParams(location.search).get("ref") || "").trim().toUpperCase();
     var ref = /^[A-Z2-9]{8}$/.test(raw) ? raw : "";  // validate; never forward garbage
