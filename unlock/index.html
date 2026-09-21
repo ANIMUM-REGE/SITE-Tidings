@@ -87,7 +87,7 @@
       const d = await r.json();
       const p = platform || "ios";
       const left = d[p] ? d[p].remaining : 0;
-      if (left > 0) { $("scarcity").style.display="block"; $("scarcity").textContent = `Only ${left} codes left — get yours today.`; }
+      if (left > 0) { $("scarcity").style.display="block"; $("scarcity").textContent = "Limited codes remaining — get yours today."; }
     } catch(e){}
   }
 
