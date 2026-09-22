@@ -32,10 +32,10 @@
       if (navigator.sendBeacon) {
         navigator.sendBeacon(
           "https://tidings-backend-func.azurewebsites.net/api/campaign/click",
-          new Blob([body], { type: "application/json" }));
+          new Blob([body], { type: "text/plain" }));
       } else {
         fetch("https://tidings-backend-func.azurewebsites.net/api/campaign/click", {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: body, keepalive: true
+          method: "POST", headers: { "Content-Type": "text/plain" }, body: body, keepalive: true, credentials: "omit"
         }).catch(function () {});
       }
     } catch (e) {}
