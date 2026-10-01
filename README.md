@@ -11,7 +11,7 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 
 ## Pages
 
-- `index.html` — homepage: hero, App Store/Play badges, a "try free" CTA, live App Store
+- `index.html` — homepage (desktop; **2026-10-01: a phone/tablet arriving from outside the site is sent on to `/get/`**, query kept, so the bare-root invite link in the 1.3.13 apps still lands on the store — crawlers and in-site navigation still see the page; the CTA links `/get/` directly): hero, App Store/Play badges, a "try free" CTA, live App Store
   screenshots (`assets/screenshots/`, pulled from the ASC media library, not regenerated
   locally), "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now
   that Tidings is live. The CTA links to `/trial/` (below), never directly to the Function App
@@ -58,3 +58,8 @@ Tidings is ✅ live on both the App Store and Google Play.
 Plain HTML, no build step — edit and commit. Keep privacy/support URLs stable: they
 are referenced from live App Store and Play listings, and a broken support URL is a
 review-rejection trigger.
+
+## Checks
+
+- `python3 scripts/check_links.py` — fails on any bare-root `https://tidings.family` link (use `/get/`).
+- `PW_CHANNEL=chrome python3 scripts/test_root_redirect.py` — real-browser phone/desktop routing of `/` and `/get/` (Playwright; store hosts stubbed).
