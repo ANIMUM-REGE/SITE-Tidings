@@ -2,8 +2,8 @@
 """Fail on any bare-root tidings.family link (BB 2026-10-01).
 
 A link someone shares or taps to get the app must be the smart-install link
-https://tidings.family/get/ (plus ?ref=/?c= where one exists), never the bare
-https://tidings.family — the root is a webpage, not a store hop. Scans every
+https://tidings.family/get/ (plus ?ref=/?c= where one exists), never the bare root
+domain — the root is a webpage, not a store hop. Scans every
 tracked file except docs/ and Markdown (historical records). A line that
 intentionally links the homepage carries the marker `link-lint:allow`.
 
