@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tidings — never miss a moment</title>
 <meta name="description" content="Tidings remembers the birthdays, anniversaries, and holidays that matter — and helps you send something warm.">
+<script>
+  // Phones go to the smart-install link (BB 2026-10-01). The in-app invite text in iOS/Android
+  // 1.3.13 ends in the bare root domain (no /get/), so a friend tapping it landed here instead of
+  // on their store listing. Any phone/tablet arriving from OUTSIDE this site goes to /get/ (query
+  // kept, so a ?ref=/?c= survives); desktop, crawlers (no JS / bot UA — link previews and search
+  // keep this page) and in-site navigation (e.g. back from /privacy.html) still see the homepage.
+  (function () {
+    var ua = navigator.userAgent || "";
+    if (/bot|crawl|spider|preview/i.test(ua)) return;
+    var mobile = /iphone|ipad|ipod|android/i.test(ua) || (/mac/i.test(ua) && navigator.maxTouchPoints > 1);
+    if (!mobile) return;
+    try { if (document.referrer && new URL(document.referrer).host === location.host) return; } catch (e) {}
+    location.replace("/get/" + location.search);
+  })();
+</script>
 <style>
   :root {
     color-scheme: light dark;
@@ -95,7 +110,7 @@
   </div>
 
   <div class="trial-cta">
-    <a class="btn" href="/trial/">Start with a free month</a>
+    <a class="btn" href="/get/">Start with a free month</a>
     <p>Download Tidings from the App Store or Google Play.</p>
   </div>
 
