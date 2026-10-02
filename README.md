@@ -46,8 +46,8 @@ Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME`
 Tidings is ✅ live on both the App Store and Google Play.
 
 > Status drifts — **re-verify rather than trust this line.**
-> `VNTR-Perpetua/company/state/app-fleet-status-2026-08-15.md` (as verified 2026-08-15)
-> carries the fleet-wide picture and the method to re-derive it.
+> `VNTR-Perpetua/company/state/ops-drops/store-versions.json` (live ASC / Play / public-store reads, refreshed each publisher cycle by `PRJ-Perpetua/dashboard/store_versions.py`)
+> carries the fleet-wide picture.
 
 ## SMS compliance
 
