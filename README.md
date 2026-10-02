@@ -2,7 +2,7 @@
 
 > Marketing and support site for Tidings: Birthdays & Occasions.
 
-Static site for the app in [`APP-Occasions`](https://github.com/ANIMUM-REGE/APP-Occasions).
+Static site for the app in [`APP-Tidings`](https://github.com/ANIMUM-REGE/APP-Tidings) (iOS) and [`APP-TidingsAndroid`](https://github.com/ANIMUM-REGE/APP-TidingsAndroid).
 Part of the Perpetua app fleet (`VNTR-Perpetua`).
 
 ## Hosting
