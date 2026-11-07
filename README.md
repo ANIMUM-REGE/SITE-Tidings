@@ -1,0 +1,65 @@
+# Tidings — site
+
+> Marketing and support site for Tidings: Birthdays & Occasions.
+
+Static site for the app in [`APP-Tidings`](https://github.com/ANIMUM-REGE/APP-Tidings) (iOS) and [`APP-TidingsAndroid`](https://github.com/ANIMUM-REGE/APP-TidingsAndroid).
+Part of the Perpetua app fleet (`VNTR-Perpetua`).
+
+## Hosting
+
+Served at **[tidings.family](https://tidings.family)** via GitHub Pages (`CNAME` committed at the repo root).
+
+## Pages
+
+- `index.html` — homepage (desktop; **2026-10-01: a phone/tablet arriving from outside the site is sent on to `/get/`**, query kept, so the bare-root invite link in the 1.3.13 apps still lands on the store — crawlers and in-site navigation still see the page; the CTA links `/get/` directly): hero, App Store/Play badges, a "try free" CTA, live App Store
+  screenshots (`assets/screenshots/`, pulled from the ASC media library, not regenerated
+  locally), "how it works", footer. **2026-09-16: replaced the "Coming soon" placeholder** now
+  that Tidings is live. The CTA links to `/trial/` (below), never directly to the Function App
+  or a raw `?k=` link, so neither the passphrase nor the `azurewebsites.net` hostname is ever
+  visible on the homepage's link preview.
+- `trial/index.html` — same-domain relay: a bare client-side redirect to
+  `tidings-backend-func`'s `/api/unlock/go`, added 2026-09-16 (BB: don't expose the Azure
+  hostname on the homepage). **Obfuscation only, not a security boundary** — the passphrase-gate
+  + one-code-per-device on the backend are the real protection either way; this page just keeps
+  `azurewebsites.net` off what a visitor sees hovering the homepage button.
+- `privacy.html`
+- `support.html`
+- `sms-opt-in.html`
+- `privacy_label.json`
+- `unlock/index.html` — the self-serve 90-day trial code dispenser (needs `?k=<passphrase>`,
+  an Azure Function App setting, never committed here). Reached from the homepage via
+  `/trial/` → `/api/unlock/go`, a 302 redirect on `tidings-backend-func` that reads the
+  passphrase server-side (`APP-Tidings/backend/function_app.py`). Not linked from the `get/`
+  page (below)
+  — BB's call, 2026-09-16: now that the code is redeemable **inside the app** (paywall +
+  Settings CTA, same dispenser pool — see `APP-Tidings/docs/design/in-app-redeem-2026-09-15.md`),
+  the SMS/direct-marketing flow sends people to install the app instead. See
+  `company/state/tidings-code-dispenser-spec.md` in VNTR-Perpetua for the original design.
+- `get/index.html` — **the link for SMS/direct-marketing campaigns.** Detects iOS vs Android
+  from the user agent and sends the visitor straight to the matching store listing (no
+  intermediate webpage); desktop/unrecognized gets a visible fallback with both badges. Added
+  2026-09-16 for BB's friends-and-family invite campaign — the early-access code is retrieved
+  in-app after install, not from a webpage.
+
+## App status
+
+Tidings is ✅ live on both the App Store and Google Play.
+
+> Status drifts — **re-verify rather than trust this line.**
+> `VNTR-Perpetua/company/state/ops-drops/store-versions.json` (live ASC / Play / public-store reads, refreshed each publisher cycle by `PRJ-Perpetua/dashboard/store_versions.py`)
+> carries the fleet-wide picture.
+
+## SMS compliance
+
+`sms-opt-in.html` is the carrier-facing opt-in disclosure for the Tidings sender (`+1 833 895 4577`). It is a **compliance artifact**, not marketing — A2P registration references it. Do not remove or relocate it without checking the sender's registration.
+
+## Editing
+
+Plain HTML, no build step — edit and commit. Keep privacy/support URLs stable: they
+are referenced from live App Store and Play listings, and a broken support URL is a
+review-rejection trigger.
+
+## Checks
+
+- `python3 scripts/check_links.py` — fails on any bare-root `https://tidings.family` link (use `/get/`).
+- `PW_CHANNEL=chrome python3 scripts/test_root_redirect.py` — real-browser phone/desktop routing of `/` and `/get/` (Playwright; store hosts stubbed).

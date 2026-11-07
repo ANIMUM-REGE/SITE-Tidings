@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Get Tidings</title>
+<!-- retired-codes-redirect: launch codes are retired (the stores' free trial (1 month) replaced
+     them, 2026-09-26). Old /unlock links land on /get/, keeping ?ref= and ?c= so referral and
+     campaign attribution still work. -->
+<meta http-equiv="refresh" content="0; url=/get/">
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search), out = new URLSearchParams();
+    ["ref", "c"].forEach(function (k) { if (q.get(k)) out.set(k, q.get(k)); });
+    var s = out.toString();
+    location.replace("/get/" + (s ? "?" + s : ""));
+  })();
+</script>
+</head>
+<body>
+<p><a href="/get/">Get Tidings</a></p>
+</body>
+</html>
